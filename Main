@@ -1,0 +1,11 @@
+public class Main {
+    public static void main(String[] args) {
+
+        //Unicamente hace uso del método del menú
+
+
+        UIMenu.showMenu();
+
+    }
+
+}
