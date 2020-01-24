@@ -1,0 +1,129 @@
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+
+//Menú de paciente
+
+public class UIPatientMenu {
+
+    public static void showPacienteMenu(){
+        System.out.println("\n \n");
+        int respuesta;
+        do {
+            System.out.println("Bienvenido Paciente " +UIMenu.patientLogged.getName()+ " selecciona una opción\n");
+            System.out.println("1.- Libro de citas");
+            System.out.println("2.- Mis citas");
+            System.out.println("0.- Regresar al menú principal");
+            Scanner entrada = new Scanner(System.in);
+            respuesta = Integer.valueOf(entrada.nextLine());
+            switch (respuesta){
+                case 1:
+
+                    showBookApointmentMenu();
+                    break;
+                case 2:
+
+                    showPatientMyAppointments();
+                    break;
+                case 0:
+                    System.out.println("Regresando...");
+
+                    UIMenu.showMenu();
+                default:
+                    System.out.println("Respuesta no valida, tonto, selecciona una de las opciones.\n");
+
+            }
+
+        } while (respuesta != 0);
+    }
+
+    //Libro de cotas, tanto para agendar como mostrar
+    private static void showBookApointmentMenu(){
+        int respuesta = 0;
+        do {
+            System.out.println("Libro de citas");
+            System.out.println("Selecciona una cita: ");
+            //Numeración de la lista de fechas
+            //Indice de fecha que seleccione el usuario
+            // 1.- Doctor
+                // - cita 1
+                // - cita 2
+            // 2.- Doctor
+            // 3.- Doctor
+            Map<Integer, Map<Integer, Doctor>> doctors = new TreeMap<>();
+            int k =0;
+            for (int i = 0; i < UIDoctorMenu.doctorsAvaiableAppointments.size() ; i++) {
+                ArrayList<Doctor.AvaiableAppointment> avaiableAppointments =
+                        UIDoctorMenu.doctorsAvaiableAppointments.get(i).getAvaiableAppointments();
+
+                // - citas
+                Map<Integer, Doctor> doctorAppointments = new TreeMap<>();
+                for (int j = 0; j < avaiableAppointments.size(); j++) {
+                    k++;
+                    System.out.println(k+ ". " + avaiableAppointments.get(j).getDate()) ;
+                    doctorAppointments.put(Integer.valueOf(j), UIDoctorMenu.doctorsAvaiableAppointments.get(i));
+                    doctors.put(Integer.valueOf(k), doctorAppointments);
+                    
+                }
+                
+            }
+
+            //Seleccionar cita
+            Scanner entrada = new Scanner(System.in);
+            System.out.println("Dame tu opción: ");
+            int respuestaDateSelected = Integer.valueOf(entrada.nextInt());
+            Map<Integer, Doctor> doctorAvaiableSelected = doctors.get(respuestaDateSelected);
+            Integer indexDate = 0; //Es para que guarde lo anterior
+            Doctor doctorSelected = new Doctor("","");
+
+            for (Map.Entry<Integer, Doctor> doc :doctorAvaiableSelected.entrySet()) {
+                indexDate = doc.getKey();
+                doctorSelected = doc.getValue();
+            }
+
+            System.out.println(doctorSelected.getName()+
+                    ". Fecha: "
+                    +doctorSelected.getAvaiableAppointments().get(indexDate).getDate() +
+                    ". Tiempo: "
+                    +doctorSelected.getAvaiableAppointments().get(indexDate).getTime());
+
+            System.out.println("Confirma tus datos:\n 1.- Correcto \n2.- Cambiar cita");
+            int respuesta2 = Integer.valueOf(entrada.nextInt());
+
+
+            if (respuesta2 == 1){
+            UIMenu.patientLogged.addAppointmentDoctors(doctorSelected,
+                    doctorSelected.getAvaiableAppointments().get(indexDate).getDate(null),
+                    doctorSelected.getAvaiableAppointments().get(indexDate).getTime());
+            UIMenu.showPacienteMenu();
+            }
+
+        }while (respuesta!= 0);
+    }
+
+    private static void showPatientMyAppointments(){
+        int respuesta = 0;
+        do {
+            System.out.println("Mis citas, de nuevo: ");
+            //Si no tiene
+            if (UIMenu.patientLogged.getAppointmentDoctors().size() ==0 ){
+                System.out.println("No tienes citas. \n Regresando...");
+                respuesta = 0;
+                showPacienteMenu();
+            }
+            //Si tiene
+            for (int i = 0; i < UIMenu.patientLogged.getAppointmentDoctors().size(); i++) {
+                int j = i + 1;
+                System.out.println(j+ " .\n  Fecha: "
+                        +UIMenu.patientLogged.getAppointmentDoctors().get(i).getDate()+
+                        " Hora: " +UIMenu.patientLogged.getAppointmentDoctors().get(i).getTime()+
+                        " Doctor: " +UIMenu.patientLogged.getAppointmentDoctors().get(i).getDoctor().getName());
+                System.out.println("0. Salir");
+            }
+
+
+        }while (respuesta !=0);
+    }
+
+}
