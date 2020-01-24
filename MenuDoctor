@@ -1,0 +1,102 @@
+package ui;
+
+import model.Doctor;
+import model.User;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class UIDoctorMenu{
+
+    public static ArrayList<Doctor> doctorsAvaiableAppointments = new ArrayList<>();
+
+    //Menú del Doctor
+    public static void showDoctorMenu(){
+
+        int response = 0;
+        do {
+            System.out.println("\n");
+            System.out.println("Hola Doctor: " +UIMenu.doctorLogged.getName());
+            System.out.println("1. Agregar cita disponible");
+            System.out.println("2. Mis citas disponibles");
+            System.out.println("0. Salir");
+            Scanner entrada = new Scanner(System.in);
+            response = entrada.nextInt();
+            switch (response){
+                case 1:
+
+                    showAddAvaiableAppointment();
+                    break;
+                case 2:
+                    break;
+                case 0:
+
+                    UIMenu.showMenu();
+                    break;
+                default:
+                    break;
+
+
+            }
+
+
+        }while (response != 0);
+    }
+
+    private static void showAddAvaiableAppointment(){
+        int response = 0;
+        Scanner entrada = new Scanner(System.in);
+        do {
+            System.out.println("\n");
+            System.out.println("Agregaremos una nueva cita ");
+            System.out.println("Selecciona un mes: ");
+            for (int i=0; i<4; i++) {
+                int j = i +1;
+                System.out.println(j +". " +UIMenu.MESES[i]);
+
+            }
+            System.out.println("0. Regresar");
+            response = Integer.valueOf(entrada.nextLine());
+
+            if (response > 0 && response < 4){
+                int monthSelected = response;
+                System.out.println("Seleccionaste el mes " +monthSelected+ ". " +UIMenu.MESES[monthSelected-1]);
+                String date;
+                int responseDate;
+                    System.out.println("\nAhora selecciona una fecha exacta [dd/mm/yyyy] ");
+                    date = entrada.nextLine();
+                    System.out.println("Tu fechas es:" + date + "\n 1. Es correcto \n 2. No esta correcto");
+                    responseDate = Integer.valueOf(entrada.nextLine());
+                    if(responseDate == 2) continue; //Hace que vuelva a "Agregaremos una nueva cita", recorre all
+
+                int responseTime;
+                String time;
+                do {
+                    System.out.println("\nAhora selecciona el horario [24:00] ");
+                    time = entrada.nextLine();
+                    System.out.println("Tu horario es:" +time+ "\n 1. Es correcto \n 2. No esta correcto");
+                    responseTime = Integer.valueOf(entrada.nextLine());
+                }while (responseTime ==2);
+
+                UIMenu.doctorLogged.addAvailableAppointment(date, time);
+                checkDoctorAvaiableAppointments(UIMenu.doctorLogged);
+            }
+            else if (response == 0){
+                System.out.println("\n Regresando...");
+
+                showDoctorMenu();
+            }
+            else if (response < 0 || response > 4){
+                System.out.println("Recuerda que solo son los primeros 3 meses, opción Invalida ");
+            }
+
+        } while (response !=0);
+    }
+
+    private static void checkDoctorAvaiableAppointments (Doctor doctor){
+        if (doctor.getAvaiableAppointments().size() > 0 && !doctorsAvaiableAppointments.contains(doctor))
+        {
+            doctorsAvaiableAppointments.add(doctor);
+        }
+    }
+}
