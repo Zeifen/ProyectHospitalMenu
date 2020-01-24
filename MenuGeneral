@@ -1,0 +1,129 @@
+package ui;
+
+import model.Doctor;
+import model.Patient;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class UIMenu {
+
+    public static final String MESES[] = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+            "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+    public static Doctor doctorLogged;
+    public static Patient patientLogged;
+
+        public static void showMenu(){
+            System.out.println("Bienvenido a nuestro menú.");
+        System.out.println("\nSelecciona la opción deseada: ");
+        int respuesta;
+        do {
+            System.out.println("1.- Doctor");
+            System.out.println("2.- Paciente");
+            System.out.println("0.- Salir");
+            Scanner entrada = new Scanner(System.in);
+            respuesta = entrada.nextInt();
+            switch (respuesta){
+                case 1:
+                    System.out.println("Doctor: " );
+                    respuesta = 0;
+                    authUser(1);
+                    UIDoctorMenu.showDoctorMenu();
+                    break;
+                case 2:
+                    System.out.println("Paciente: " );
+                    respuesta = 0;
+                    authUser(2);
+                    showPacienteMenu();
+                    break;
+                case 0:
+                    System.out.println("Gracias por tu visita.");
+                    break;
+                default:
+                    System.out.println("Selecciona la respuesta correcta, respuesta no valida.\n");
+            }
+        } while (respuesta != 0);
+    }
+
+        static void showPacienteMenu(){
+            System.out.println("\n \n");
+            int respuesta;
+            do {
+                System.out.println("Bienvenido Paciente, selecciona una opción\n");
+                System.out.println("1.- Libro de citas");
+                System.out.println("2.- Mis citas");
+                System.out.println("0.- Regresar al menú principal");
+                Scanner entrada = new Scanner(System.in);
+                respuesta = entrada.nextInt();
+                switch (respuesta){
+                    case 1:
+                        System.out.println("\nLibro de citas:");
+                        int y=1;
+                        for (int i=0; i<3; i++)
+                        {
+                            System.out.println(y+ ".-" +MESES[i]);
+                            y++;
+                        }
+                        break;
+                    case 2:
+
+                        UIPatientMenu.showPacienteMenu();
+
+                        break;
+                    case 0:
+                        System.out.println("Regresando...");
+
+                        showMenu();
+                    default:
+                        System.out.println("Respuesta no valida, tonto, selecciona una de las opciones.\n");
+
+                }
+
+            } while (respuesta != 0);
+        }
+
+        //Base de datos simulada
+        private static void authUser(int userType){
+            // 1 = Doctor
+            //2 = Paciente
+            ArrayList<Doctor> doctors = new ArrayList<>();
+            doctors.add(new Doctor("Doctor Juarez", "juarez@mail"));
+            doctors.add(new Doctor("Doctor Espinoza", "es@mail"));
+            doctors.add(new Doctor("Doctora Ruiz", "ru@mail"));
+
+            ArrayList<Patient> patients = new ArrayList<>();
+            patients.add(new Patient("Hernandez", "her@mail"));
+            patients.add(new Patient("Jose", "jose@mail"));
+            patients.add(new Patient("Serruga", "serrug@mail"));
+
+            boolean emailCorrect = false;
+            do {
+                System.out.println("Dame tu correo @mail");
+                Scanner entrada = new Scanner(System.in);
+                String email = entrada.nextLine();
+                if (userType ==1){
+                    for (Doctor d: doctors){
+                        if (d.getEmail().equals(email)){
+                            emailCorrect = true;
+                            //Obtener el usuario logeado
+                            doctorLogged = d;
+                            // show DoctorMenu
+                        }
+                    }
+                }
+                if (userType ==2){
+                    for (Patient p: patients){
+                        if (p.getEmail().equals(email)){
+                            emailCorrect = true;
+                            //Obtener el usuario logeado
+                            patientLogged = p;
+                            UIPatientMenu.showPacienteMenu();
+                            // show DoctorMenu
+                        }
+                    }
+                }
+            }while (!emailCorrect);
+        }
+
+    }
+
