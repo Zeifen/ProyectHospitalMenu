@@ -1,0 +1,69 @@
+package model;
+
+//Combinación de herencia e interfaz
+public abstract class User {
+
+    private int id;
+    private String name;
+    private String email;
+    private String phoneNumber;
+    private String address;
+
+    //Para que un usuario exista necesito su nombre y email
+    public User(String name,String email){
+        this.name = name;
+        this.email = email;
+    }
+    //Name
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName(){
+        return name;
+    }
+    //Email
+    public void setEmail(String email){
+        this.email = email;
+    }
+    public String getEmail(){
+        return email;
+    }
+    //ID
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    //phoneNumber
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        if (phoneNumber.length() > 10)
+        {
+            System.out.println("El número debe ser de 10 dígitos máximo.");
+        }
+        else if(phoneNumber.length() == 10)
+        {
+            this.phoneNumber = phoneNumber;
+        }
+    }
+    //Address
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override //Hace referencia a que este método no es propio de la clase model.User
+    public String toString() {
+        return "Usuario: " +name+ ". Email: " +email+ ". Dirección: " +address+ ". Número tel. : " +phoneNumber;
+    }
+
+    public abstract void showDataUser(); //No puede llevar instrucciones, funciona como la interfaz
+
+}
