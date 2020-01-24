@@ -1,0 +1,101 @@
+package model;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
+//Herencia de User
+public class Doctor extends User{
+        //Atributo
+        private String speciality;
+        private ArrayList<AvaiableAppointment> avaiableAppointments = new ArrayList<>();
+
+    //El color amarillo indica que metodo constructor se esta utilizando en el Main de los 2 que tenemos.
+    public Doctor(String name, String email){
+        super(name, email);
+        //Aqui iba un print y speciality
+    }
+
+        public void setSpeciality(String speciality){
+            this.speciality = speciality;
+        }
+        public String getSpeciality(){
+            return speciality;
+        }
+
+    // Comportamientos (método)
+
+
+        public void addAvailableAppointment(String date, String time){
+                avaiableAppointments.add(new AvaiableAppointment(date, time));
+        }
+
+        public ArrayList<AvaiableAppointment> getAvaiableAppointments(){
+            return avaiableAppointments;
+        }
+
+    @Override
+    public String toString() {
+        return super.toString() + "\n Especialidad: " +speciality+ ". Disponible: " +avaiableAppointments.toString();
+    }
+
+    @Override
+    public void showDataUser() {
+        System.out.println("\nEmpleado del Hospital: Cruz Verde");
+        System.out.println("Doctores");
+    }
+
+    //clase estatica
+        public static class AvaiableAppointment {
+            private int id;
+            private Date date;
+            private String time;
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy");
+
+            //Costructor - Sus parametros
+           public AvaiableAppointment(String date, String time){
+               try {
+                   this.date = format.parse(date);
+               } catch (ParseException e) {
+                   e.printStackTrace();
+               }
+               this.time = time;
+            }
+            //ID
+            public int getId() {
+                return id;
+            }
+
+            public void setId(int id) {
+                this.id = id;
+            }
+            //Date
+            public Date getDate(String DATE) {
+                return date;
+            }
+
+        public String getDate() {
+            return format.format(date);
+        }
+
+            public void setDate(Date date) {
+                this.date = date;
+            }
+            //Time
+            public String getTime() {
+                return time;
+            }
+
+            public void setTime(String time) {
+                this.time = time;
+            }
+
+            //podemos usar los metodos de la clase anidada como: nombredelobjeto.AvaiableAppointments.metodo
+
+            @Override
+            public String toString() {
+                return "Date: " +date+ ". Time: " +time;
+            }
+        }
+}
